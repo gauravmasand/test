@@ -1,0 +1,81 @@
+/* Problem stmt - 5
+MongoDB Aggregation */
+
+use bookstoreDB;
+
+db.books.insertMany([
+    {
+        title: "The Great Gatsby",
+        author: "F. Scott Fitzgerald",
+        genre: "Fiction",
+        price: 1500,
+        published_date: new Date("1925-04-10")
+    },
+    {
+        title: "1984",
+        author: "George Orwell",
+        genre: "Sci-Fi",
+        price: 1200,
+        published_date: new Date("1949-06-08")
+    },
+    {
+        title: "To Kill a Mockingbird",
+        author: "Harper Lee",
+        genre: "Fiction",
+        price: 1800,
+        published_date: new Date("1960-07-11")
+    },
+    {
+        title: "The Catcher in the Rye",
+        author: "J.D. Salinger",
+        genre: "Fiction",
+        price: 1300,
+        published_date: new Date("1951-07-16")
+    },
+    {
+        title: "The Lord of the Rings",
+        author: "J.R.R. Tolkien",
+        genre: "Fantasy",
+        price: 2500,
+        published_date: new Date("1954-07-29")
+    },
+    {
+        title: "Dune",
+        author: "Frank Herbert",
+        genre: "Sci-Fi",
+        price: 2000,
+        published_date: new Date("1965-08-01")
+    }
+]);
+
+db.books.aggregate([
+    { $group: { _id: null, averagePrice: { $avg: "$price" } } }
+]);
+
+db.books.aggregate([
+    { $group: { _id: "$genre", count: { $sum: 1 } } }
+]);
+
+db.books.aggregate([
+    { $sort: { price: -1 } },
+    { $group: { _id: "$genre", mostExpensiveBook: { $first: "$$ROOT" } } },
+    { $project: { genre: "$_id", title: "$mostExpensiveBook.title", price: "$mostExpensiveBook.price" } }
+]);
+
+db.books.aggregate([
+    { $group: { _id: "$author", bookCount: { $sum: 1 } } },
+    { $sort: { bookCount: -1 } },
+    { $limit: 1 }
+]);
+
+db.books.aggregate([
+    { $sort: { published_date: -1 } }
+]);
+
+db.books.aggregate([
+    { $sort: { price: 1 } }
+]);
+
+db.books.createIndex({ title: 1 });
+
+db.books.getIndexes();

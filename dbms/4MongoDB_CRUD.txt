@@ -1,0 +1,52 @@
+/*Problem Statement: -4 
+Create following collections and Perform Mongodb CRUD Operations. 
+Teachers (Tname, dno, dname, experience, salary, date_of_joining ) 
+Students(Sname, roll_no, class)*/
+
+
+use SchoolDatabase;
+
+db.Teachers.insertMany([
+    { Tname: "Praveen", dno: 101, dname: "Computer", experience: 5, salary: 12000, date_of_joining: new Date("2018-08-15") },
+    { Tname: "Aarti", dno: 102, dname: "IT", experience: 8, salary: 14000, date_of_joining: new Date("2016-06-20") },
+    { Tname: "Rajesh", dno: 103, dname: "E&TC", experience: 6, salary: 10000, date_of_joining: new Date("2019-01-10") },
+    { Tname: "Neha", dno: 104, dname: "Computer", experience: 3, salary: 9500, date_of_joining: new Date("2021-09-05") }
+]);
+
+db.Students.insertMany([
+    { Sname: "Alex", roll_no: 1, class: "10th" },
+    { Sname: "Zendya", roll_no: 2, class: "12th" },
+    { Sname: "Jack", roll_no: 3, class: "10th" }
+]);
+
+db.Teachers.find().sort({ Tname: 1 });
+
+db.Teachers.find({ dname: "Computer" });
+
+db.Teachers.find({ dname: { $in: ["Computer", "IT", "E&TC"] } });
+
+db.Teachers.find({ 
+    dname: { $in: ["Computer", "IT", "E&TC"] },
+    salary: { $gte: 10000 }
+});
+
+db.Students.find({ 
+    $or: [{ roll_no: 2 }, { Sname: "XYZ" }]
+});
+
+db.Teachers.updateOne(
+    { Tname: "Praveen" },
+    { $set: { experience: 10 } },
+    { upsert: true }
+);
+
+db.Teachers.updateMany(
+    { dname: "IT" },
+    { $set: { dname: "COMP" }
+});
+
+db.Teachers.find({}, { Tname: 1, experience: 1, _id: 0 });
+
+db.Teachers.deleteMany({ dname: "IT" });
+
+db.Teachers.find().sort({ Tname: 1 }).limit(3);

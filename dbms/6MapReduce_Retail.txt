@@ -1,0 +1,31 @@
+/*Problem Statement: -6 
+
+use retailDB;
+
+db.createCollection("customer");
+
+db.customer.insertMany([
+    { cid: 1, cname: "John Doe", amount: 200, product_name: "Laptop" },
+    { cid: 1, cname: "John Doe", amount: 150, product_name: "Headphones" },
+    { cid: 2, cname: "Jane Smith", amount: 450, product_name: "Smartphone" },
+    { cid: 2, cname: "Jane Smith", amount: 300, product_name: "Tablet" },
+    { cid: 3, cname: "Bob Johnson", amount: 100, product_name: "Keyboard" }
+]);
+
+var mapFunction = function() {
+    emit(this.cid, this.amount);
+};
+
+var reduceFunction = function(cid, amounts) {
+    return Array.sum(amounts);
+};
+
+db.customer.mapReduce(
+    mapFunction,
+    reduceFunction,
+    {
+        out: "total_spent_per_customer"
+    }
+);
+
+db.total_spent_per_customer.find().pretty();

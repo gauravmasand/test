@@ -1,0 +1,96 @@
+CREATE TABLE Branch (
+    branch_name VARCHAR(50) PRIMARY KEY,
+    branch_city VARCHAR(50) NOT NULL,
+    assets_amt DECIMAL(15, 2) CHECK (assets_amt >= 0)
+);
+
+CREATE TABLE Account (
+    acc_no INT PRIMARY KEY,
+    branch_name VARCHAR(50),
+    balance DECIMAL(15, 2) NOT NULL CHECK (balance >= 0),
+    FOREIGN KEY (branch_name) REFERENCES Branch(branch_name)
+);
+
+CREATE TABLE Customer (
+    cust_name VARCHAR(50) PRIMARY KEY,
+    cust_street VARCHAR(50),
+    cust_city VARCHAR(50)
+);
+
+CREATE TABLE Depositor (
+    cust_name VARCHAR(50),
+    acc_no INT,
+    FOREIGN KEY (cust_name) REFERENCES Customer(cust_name),
+    FOREIGN KEY (acc_no) REFERENCES Account(acc_no),
+    PRIMARY KEY (cust_name, acc_no)
+);
+
+CREATE TABLE Loan (
+    acc_no INT,
+    loan_no INT PRIMARY KEY,
+    branch_name VARCHAR(50),
+    amount DECIMAL(15, 2) NOT NULL CHECK (amount >= 0),
+    FOREIGN KEY (branch_name) REFERENCES Branch(branch_name),
+    FOREIGN KEY (acc_no) REFERENCES Account(acc_no)
+);
+
+CREATE TABLE Borrower (
+    cust_name VARCHAR(50),
+    loan_no INT,
+    FOREIGN KEY (cust_name) REFERENCES Customer(cust_name),
+    FOREIGN KEY (loan_no) REFERENCES Loan(loan_no),
+    PRIMARY KEY (cust_name, loan_no)
+);
+
+INSERT INTO Branch (branch_name, branch_city, assets_amt) VALUES ('Pimpri', 'Pune', 1000000.00), ('Akurdi', 'Pune', 500000.00);
+
+INSERT INTO Account (acc_no, branch_name, balance) VALUES (101, 'Pimpri', 15000.00), (102, 'Akurdi', 8000.00), (103, 'Pimpri', 20000.00);
+
+INSERT INTO Customer (cust_name, cust_street, cust_city) VALUES ('John Doe', 'Maple Street', 'Pune'), ('Jane Smith', 'Oak Avenue', 'Mumbai');
+
+INSERT INTO Depositor (cust_name, acc_no) VALUES ('John Doe', 101), ('Jane Smith', 102);
+
+INSERT INTO Loan (acc_no, loan_no, branch_name, amount) VALUES (101, 201, 'Pimpri', 15000.00), (102, 202, 'Akurdi', 13000.00), (103, 203, 'Pimpri', 25000.00);
+
+INSERT INTO Borrower (cust_name, loan_no) VALUES ('John Doe', 201), ('Jane Smith', 202);
+
+SELECT DISTINCT branch_name FROM Loan;
+
+SELECT loan_no 
+FROM Loan 
+WHERE branch_name = 'Pimpri' AND amount > 12000;
+
+SELECT Borrower.cust_name, Loan.loan_no, Loan.amount
+FROM Borrower
+JOIN Loan ON Borrower.loan_no = Loan.loan_no;
+
+SELECT DISTINCT Borrower.cust_name
+FROM Borrower
+JOIN Loan ON Borrower.loan_no = Loan.loan_no
+WHERE Loan.branch_name = 'Akurdi'
+ORDER BY Borrower.cust_name;
+
+SELECT DISTINCT cust_name
+FROM Customer
+WHERE cust_name IN (SELECT cust_name FROM Depositor)
+   OR cust_name IN (SELECT cust_name FROM Borrower);
+
+SELECT DISTINCT cust_name
+FROM Depositor
+WHERE cust_name IN (SELECT cust_name FROM Borrower);
+
+SELECT AVG(balance) AS avg_balance
+FROM Account
+WHERE branch_name = 'Pimpri';
+
+SELECT branch_name, AVG(balance) AS avg_balance
+FROM Account
+GROUP BY branch_name;
+
+SELECT branch_name
+FROM Account
+GROUP BY branch_name
+HAVING AVG(balance) > 12000;
+
+SELECT SUM(amount) AS total_loan_amount
+FROM Loan;
