@@ -1,0 +1,15 @@
+URL -
+. http://techpanda.org
+
+http.request.method == POST
+
+http && ip.addr == <facebook_IP_address> // not working add your pc IP -> command in cmd - ipconfig
+
+Step 2: Write a Display Filter Expression for TCP Flags
+b. Display Filter for Counting TCP Packets with SYN, PSH, and RST Flags Set
+Apply Display Filter: Use the following display filters for each flag to count the packets with SYN, PSH, and RST set:
+
+SYN Flag: tcp.flags.syn == 1
+PSH Flag: tcp.flags.push == 1
+RST Flag: tcp.flags.reset == 1
+

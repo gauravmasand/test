@@ -1,0 +1,43 @@
+13. To study the SSL protocol by capturing the packets using Wiresharktool while visiting any SSL secured website (banking, e-commerceetc.).
+(10)
+SSL (Secure Sockets Layer) protocol 
+TLS (Transport Layer Security) protocol
+
+Prerequisites
+Wireshark: Download and install Wireshark.
+SSL/TLS-Enabled Website: Visit a website using HTTPS (like a banking or e-commerce site). Choose a safe website that doesn’t require entering sensitive information for demonstration purposes.
+Step-by-Step Instructions
+Start Wireshark:
+
+Open Wireshark and select the network interface you are using (Wi-Fi or Ethernet).
+Set Up a Capture Filter (Optional):
+
+To capture only HTTPS traffic, you can set a capture filter for TCP traffic on port 443 (the default SSL/TLS port).
+Enter this in the capture filter box: tcp port 443
+Start Packet Capture:
+
+Click on the Start Capturing button (the shark fin icon) in Wireshark to begin capturing packets.
+Visit an HTTPS Website:
+
+Open a web browser and visit an SSL/TLS-enabled website (e.g., https://example.com).
+Note: Avoid logging in or entering sensitive information on websites while capturing traffic.
+Observe the SSL/TLS Handshake:
+
+After capturing some packets, return to Wireshark and click Stop Capturing.
+In Wireshark, use a Display Filter to show only SSL/TLS packets. Use the filter:
+Copy code
+ssl || tls
+Look for the following packets in the handshake:
+Client Hello: The client (browser) initiates the SSL/TLS handshake.
+Server Hello: The server responds with supported SSL/TLS version and cipher suites.
+Certificate: The server sends its SSL certificate to the client for verification.
+Server Key Exchange: The server provides public key information (if using certain cipher suites).
+Client Key Exchange: The client generates a pre-master secret and encrypts it using the server’s public key.
+Change Cipher Spec and Finished Messages: These messages mark the end of the handshake and start of encrypted communication.
+Analyze Packets:
+
+Click on any SSL/TLS packet to view detailed information about it in Wireshark.
+You can expand fields in the Packet Details pane to explore more about each step in the handshake and communication.
+Save the Capture (Optional):
+
+If you want to keep the capture for later analysis, you can save it by selecting File > Save As... and choosing a location on your computer.

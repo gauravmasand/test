@@ -1,0 +1,22 @@
+6 -> PC
+3 -> switch(PT)
+3 -> router(PT) or 1841
+
+- Click on router-0 -> go to physical -> Add slot WIC-1T on right side
+- Click on router-1 -> go to physical -> Add 2 slots WIC-1T on right and left side
+- Click on router-2 -> go to physical -> Add slot WIC-1T on right side
+
+* IP Addressing *
+- Click on router0 -> config -> FastEthernet0/0 -> Give IP 192.168.1.4 which will be default gateway for below small network(PC0, PC1)
+- serial0/0 - IP - 192.168.4.2
+
+- Click on router1 -> config -> FastEthernet0/0 -> Give IP 192.168.2.4 which will be default gateway for below small network(PC2, PC3)
+- serial0/0 - IP - 192.168.4.3
+- serial1/0 - IP - 192.168.5.2
+
+- Click on router2 -> config -> FastEthernet0/0 -> Give IP 192.168.3.4 which will be default gateway for below small network(PC4, PC5)
+- serial0/0 - IP - 192.168.5.3
+
+- RIP Protocol-
+In each router's config go to RIP protocol and add there network addresses to which router is connected 
+net. add. is nothing but starting address of any network (ends with zero-0)

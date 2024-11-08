@@ -1,0 +1,35 @@
+//visit facebook.com, amazon.in, sbi.com
+
+
+To show SSL/TLS packets:
+ssl || tls
+
+To focus specifically on HTTPS traffic:
+tcp.port == 443
+
+o view only the SSL/TLS handshake:
+ssl.handshake || tls.handshake
+
+To show all TLS records:
+tls.record
+
+To capture only TCP packets on port 443 (HTTPS traffic):
+tcp port 443
+
+To filter for any SSL/TLS traffic by protocol name:
+tls
+
+For a more specific TLS handshake filter:
+tls.handshake.type
+
+//for amazon.in
+ip.addr==54.229.251.163 && ssl  // if it is not working try to add your system ip - use command ipconfig in cmd
+
+
+// for tcp - filters
+
+tcp.flags.sys == 1
+tcp.flags.push == 1
+tcp.flags.reset == 1
+tcp && ip.addr == 10.30.74.96
+
